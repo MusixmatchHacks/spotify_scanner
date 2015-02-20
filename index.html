@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+<head>
+	<title>Spotify scanner</title>
+</head>
+/*.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}*/
+
+</style>
+<link rel="stylesheet" href="style.css">
+<script src = "savePlaylist.js">
+</script>
+
+<!-- <body onload="doit()"> -->
+<body>
+<!-- <header>
+	<div class="container" >
+		<img src="http://musixmatch.com/img/mxm_logo_black.png" width="135" alt="Musixmatch" />
+		<a href="http://research.musixmatch.com/post/91742619855/musixmatch-curator-playlists-about-oranges-and-more">About the project</a>
+	</div>
+</header>
+ --><h1>Spotify new releases</h1>
+<!-- <h2>Create a Spotify playlist of songs with lyrics containing searched word/s or with lyrics similar to a track</h2> -->
+<!-- 	<form name="form1" id = 'searchForm' method="get">
+		
+	</form>
+ -->	
+ 	<!-- <input type="search" id="mxmTrackSearch" placeholder="Insert word/s" /> -->
+	
+	<!-- <select id = "searchType">
+  		<option value="words" >Search with 'Words'</option>
+  		<option value="track">Search with 'Track-Artist'</option>
+  		<option value="mxmId" disabled>MusixmatchID</option>
+ -->
+<!--   		<option value="mercedes">Mercedes</option>
+  		<option value="audi">Audi</option>
+ </select>
+ 	<div id = "playlistTypeContainer" style = "display:none">
+ <! 		<select id = "playlistType" >
+  			<option value="covers">Playlist with covers</option>
+  			<option value="uniques">Playlist without covers</option>
+ 		</select>
+ -->	
+ 		<!-- More covers songs<input type="range"  id="cover_songs" min="0" max="15" />Less cover songs -->
+	<!-- </div> -->
+	
+	<!-- <div id = "buttonContainer">
+ 		<input type="button" value="Make playlist" id = "makePlaylist">
+ 	</div>
+ 	
+ 	<div style = "display:none">
+			Similarity to query: less<input type="range"  id="max_query_terms" name="max_query_terms" min="1" max="30" />more
+	</div>
+	<div style = "display:none">
+			Number of tracks to : more<input type="range"  id="min_term_freq" name="min_term_freq" min="1" max="30" />less
+	</div>
+	<div id = "status" style = "display:inline"></div> -->
+	<!-- <progress id = "ProgressBar" value="0" max="100" style = ""></progress> -->
+	<div> <input type="button" value="Save This Playlist To Spotify" id = "SpotifySave" style = "display:inline-block"> </div>
+	<!-- <div id = "SpotifyWidget" > </div> -->
+	
+<!-- <footer>
+	Uses <a href="https://developer.musixmatch.com/">Musixmatch API</a>, <a href="https://developer.spotify.com/web-api/">Spotify web API</a> and <a href="https://developer.spotify.com/technologies/widgets/">Spotify widgets</a>. Contact the author at <a href="https://twitter.com/neotheoen">@neotheoen</a>.
+</footer> -->
+
+</body>
+<!-- <svg class="chart"></svg> -->
+<!-- <script src="http://jpillora.com/xdomain/dist/0.6/xdomain.min.js" master="localhost:8888"></script> -->
+<script src="jquery-1.11.1.min.js"></script>
+
+<script>
+  // $.jsonp({
+  //   url: 'http://api.musixmatch.com/ws/1.1/track.search?apikey=b463ed1270b71853d56be5bd776a9b4a&q_lyrics=i%20love%20you', // any JSON endpoint
+  //   corsSupport: true, // if URL above supports CORS (optional)
+  //   jsonpSupport: true, // if URL above supports JSONP (optional)
+ 
+  //   success: function(data){
+  //     alert('CORS or JSONP! ' + data.awesome);
+  //   }
+  //   // error, etc.
+  // });
+</script>
+
+
+<script>
+searchQuery = document.getElementById('mxmTrackSearch')	
+searchForm = document.getElementById('searchForm')
+searchType = document.getElementById('searchType')
+min_term_freq = document.getElementById('min_term_freq')
+//console.log(min_term_freq.value)
+max_query_terms = document.getElementById('max_query_terms')
+//SpotifySave = document.getElementById('SpotifySave')
+MakePlaylist = document.getElementById('makePlaylist')
+PlaylistTypeContainer = document.getElementById('playlistTypeContainer')
+covers = document.getElementById('cover_songs')
+var mxmAPI_base = 'https://api.musixmatch.com/ws/1.1/'
+var apiKey = 'd8951a826384c648324e206c942b5cce'
+	
+var spotify_auth_base = 'https://accounts.spotify.com/authorize'
+var spotify_client_ID = '14fb55b1df36454793caa07ab8abefe6'
+var spotify_client_secret = 'cf72548f86e8493d8aa38cc881a63ee4'
+
+var have_valid_playlist = false
+
+function getJSON(url) 
+{
+	var get_promise = $.getJSON(url);
+	//console.log(url)
+	return get_promise.then(JSON.stringify).then(JSON.parse);
+}
+
+function getJSONTrackRelated(track_id) 
+{
+	var url = mxmAPI_base + 'track.related.get?apikey=' + apiKey +'&page_size=100&g_commontrack=1&max_query_terms'+ max_query_terms.value + '&min_term_freq=' + min_term_freq.value + '&track_id=' + track_id +'&format=jsonp&callback=?'
+	var url = encodeURI(url)
+	var get_promise = $.getJSON(url);
+	//console.log(url)
+	return get_promise.then(JSON.stringify).then(JSON.parse);
+		//console.log(url)
+		//return getJSON(url);
+}
+
+function checkRepetition(track_list, track)
+{
+	return track_list.some(function(current_track)
+	{
+		if (current_track.artist_name == track.artist_name)
+		{
+			if (current_track.track_name == track.track_name) 
+			{
+				return true
+			}
+		}
+		//return false
+	})
+}
+
+
+
+SpotifySave.onclick = function(e){
+  loginWithSpotify()
+}
+
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52694472-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
