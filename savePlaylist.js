@@ -159,6 +159,7 @@ function doit() {
         g_access_token = args['access_token'];
     }
     console.log(g_access_token)
+    console.log(args)
     localStorage.setItem('access_token', g_access_token);
     localStorage.setItem('args', args)
 
