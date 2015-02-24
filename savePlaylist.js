@@ -8,7 +8,8 @@ function loginWithSpotify() {
    //var redirect_uri = 'http://localhost:8884/callback.html';
    var redirect_uri = 'http://lab.musixmatch.com/spotify_scanner/callback.html';
    var url = 'https://accounts.spotify.com/authorize?client_id=' + client_id +
-       '&response_type=token' +
+       // '&response_type=token' +
+       '&response_type=code' +
        '&scope=playlist-modify-private' +
        '&redirect_uri=' + encodeURIComponent(redirect_uri);
     //console.log(encodeURIComponent(redirect_uri))
