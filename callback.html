@@ -94,7 +94,7 @@
     <title> Lyrics recommendation playlist</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link type="text/css" href="styles.css" rel="stylesheet" />
+    <link type="text/css" href="style.css" rel="stylesheet" />
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
      <!-- <link href="dist/sp-bootstrap.min.css" rel="stylesheet" media="screen"> -->
@@ -105,6 +105,13 @@
 function pageLoad()
 {
   doit()
+
+  $('#status').text("Access granted to this app")
+
+  window.setTimeout(function(){
+      console.log('here')
+      window.close();
+    }, 10000)
   // playlist_name = localStorage.getItem('playlist-name');
   // track_ids = JSON.parse(localStorage.getItem('track_ids'));
   // console.log(playlist_name)
